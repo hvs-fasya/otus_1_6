@@ -44,7 +44,5 @@ type OtusEvent interface {
 
 //LogOtusEvent write e event log message to w writer
 func LogOtusEvent(e OtusEvent, w io.Writer) {
-	msg := []byte{}
-	msg = append(msg, e.Log()...)
-	w.Write(msg)
+	w.Write(e.Log())
 }

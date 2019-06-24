@@ -1,8 +1,8 @@
 package otus_1_6
 
 import (
+	"fmt"
 	"io"
-	"strconv"
 )
 
 const (
@@ -17,10 +17,8 @@ type HwAccepted struct {
 }
 
 //Log write log message
-func (hwa HwAccepted) Log() []byte {
-	var b []byte
-	b = append(b, []byte(HwAcceptedWrapper+": ID "+strconv.Itoa(hwa.ID)+", Grade "+strconv.Itoa(hwa.Grade)+"\n")...)
-	return b
+func (hwa HwAccepted) Log() string {
+	return fmt.Sprintf("%s: ID %d, Grade %d\n", HwAcceptedWrapper, hwa.ID, hwa.Grade) //example: HOMEWORK ACCEPTED: ID 2, Grade 5
 }
 
 //HwSubmitted homework submitted event struct
@@ -31,18 +29,22 @@ type HwSubmitted struct {
 }
 
 //Log write log message
-func (hws HwSubmitted) Log() []byte {
-	var b []byte
-	b = append(b, []byte(HwSubmittedWrapper+":\nID: "+strconv.Itoa(hws.ID)+"\nCode:\n"+hws.Code+"\nComment:\n"+hws.Comment+"\n")...)
-	return b
+func (hws HwSubmitted) Log() string {
+	return fmt.Sprintf("%s:\nID: %d\nCode:\n%s\nComment:\n%s\n", HwSubmittedWrapper, hws.ID, hws.Code, hws.Comment)
+	//example: 	  HOMEWORK SUBMITTED:
+	//            ID: 2
+	//            Code:
+	//            some code
+	//            Comment:
+	//            some comment
 }
 
 //OtusEvent log event interface
 type OtusEvent interface {
-	Log() []byte
+	Log() string
 }
 
 //LogOtusEvent write e event log message to w writer
 func LogOtusEvent(e OtusEvent, w io.Writer) {
-	w.Write(e.Log())
+	w.Write([]byte(e.Log()))
 }
